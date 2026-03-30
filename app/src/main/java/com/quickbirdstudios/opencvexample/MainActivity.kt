@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         Log.d(OpenCVTag, "Version : ${OpenCVLoader.OPENCV_VERSION}")
-        if(!OpenCVLoader.initDebug()) {
+        if (!OpenCVLoader.initLocal()) {
             binding.tvStatus.text = "Unable to load OpenCV"
             return
         }
