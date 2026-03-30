@@ -2,10 +2,11 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'maven-publish'
+    id 'signing'
 }
 
 android {
-    namespace "com.quickbirdstudios.opencv"
+    namespace "org.atom360.opencv"
     compileSdk 35
 
     defaultConfig {
@@ -55,34 +56,77 @@ dependencies {
     api 'org.opencv:opencv:4.13.0'
 }
 
-// Publish as com.quickbirdstudios:opencv-contrib:4.10.0
-// Run: ./gradlew :opencv-contrib:publishToMavenLocal
+// ---------------------------------------------------------------------------
+// Publishing — org.atom360:opencv-android:4.13.0
 //
-// The maven-publish plugin provides publishToMavenLocal automatically —
-// no explicit repository declaration needed for Maven Local.
-publishing {
-    publications {
-        release(MavenPublication) {
-            groupId    = 'com.quickbirdstudios'
-            artifactId = 'opencv-contrib'
-            version    = '4.13.0'
+// Local test:
+//   ./gradlew :opencv-contrib:publishToMavenLocal
+//
+// Release to Maven Central:
+//   ./gradlew :opencv-contrib:publishReleasePublicationToSonatypeRepository \
+//             --no-configuration-cache
+//
+// Required gradle.properties (or env vars):
+//   mavenCentralUsername=<Sonatype Central token username>
+//   mavenCentralPassword=<Sonatype Central token password>
+//   signing.keyId=<last 8 chars of GPG key ID>
+//   signing.password=<GPG key passphrase>
+//   signing.secretKeyRingFile=<path to ~/.gnupg/secring.gpg>
+// ---------------------------------------------------------------------------
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId    = 'org.atom360'
+                artifactId = 'opencv-android'
+                version    = '4.13.0'
 
-            afterEvaluate {
                 from components.release
-            }
 
-            pom {
-                name        = 'OpenCV Android (contrib)'
-                description = 'OpenCV 4.13.0 for Android — 16 KB page-size compatible. ' +
-                              'Wraps org.opencv:opencv:4.13.0 (issue #26724 fix, Jan 2025).'
-                url         = 'https://github.com/QuickBirdEng/opencv-android'
-                licenses {
-                    license {
-                        name = 'BSD 3-Clause License'
-                        url  = 'https://opensource.org/licenses/BSD-3-Clause'
+                pom {
+                    name        = 'OpenCV Android'
+                    description = 'OpenCV 4.13.0 for Android — 16 KB page-size compatible. ' +
+                                  'Wraps org.opencv:opencv:4.13.0 (issue #26724 fix, Jan 2025).'
+                    url         = 'https://github.com/atom360/opencv-android'
+
+                    licenses {
+                        license {
+                            name = 'Apache License 2.0'
+                            url  = 'https://www.apache.org/licenses/LICENSE-2.0'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id   = 'atom360'
+                            name = 'Atom360'
+                            url  = 'https://github.com/atom360'
+                        }
+                    }
+
+                    scm {
+                        connection          = 'scm:git:git://github.com/atom360/opencv-android.git'
+                        developerConnection = 'scm:git:ssh://github.com/atom360/opencv-android.git'
+                        url                 = 'https://github.com/atom360/opencv-android'
                     }
                 }
             }
         }
+
+        repositories {
+            maven {
+                name = 'Sonatype'
+                // Sonatype Central Portal upload endpoint
+                url = 'https://central.sonatype.com/api/v1/publisher/upload'
+                credentials {
+                    username = project.findProperty('mavenCentralUsername') ?: ''
+                    password = project.findProperty('mavenCentralPassword') ?: ''
+                }
+            }
+        }
+    }
+
+    signing {
+        sign publishing.publications.release
     }
 }
