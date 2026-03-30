@@ -56,6 +56,6 @@ dependencies {
 
     // Use the local opencv-contrib library module (mirrors what a real consumer
     // gets after running ./gradlew :opencv-contrib:publishToMavenLocal and
-    // adding implementation "com.quickbirdstudios:opencv-contrib:4.10.0").
+    // adding implementation "com.quickbirdstudios:opencv-contrib:4.13.0").
     implementation project(':opencv-contrib')
 }

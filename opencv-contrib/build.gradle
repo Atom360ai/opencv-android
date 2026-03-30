@@ -49,10 +49,10 @@ dependencies {
     // 'api' makes OpenCV visible to any app that depends on this library —
     // no need to re-declare it in the consuming app's build.gradle.
     //
-    // org.opencv:opencv 4.10.0+ is built with NDK r27+ and the CMake flag
-    // -DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON, so every LOAD segment in the
+    // org.opencv:opencv 4.11.0+ includes the fix for 16 KB page-size support
+    // (upstream issue #26724, landed Jan 2025). Every LOAD segment in the
     // .so files is aligned to a 16 KB boundary — the requirement for Android 15+.
-    api 'org.opencv:opencv:4.10.0'
+    api 'org.opencv:opencv:4.13.0'
 }
 
 // Publish as com.quickbirdstudios:opencv-contrib:4.10.0
@@ -65,7 +65,7 @@ publishing {
         release(MavenPublication) {
             groupId    = 'com.quickbirdstudios'
             artifactId = 'opencv-contrib'
-            version    = '4.10.0'
+            version    = '4.13.0'
 
             afterEvaluate {
                 from components.release
@@ -73,9 +73,8 @@ publishing {
 
             pom {
                 name        = 'OpenCV Android (contrib)'
-                description = 'OpenCV 4.10.0 for Android — 16 KB page-size compatible. ' +
-                              'Wraps org.opencv:opencv:4.10.0 built with NDK r27+ and ' +
-                              '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON.'
+                description = 'OpenCV 4.13.0 for Android — 16 KB page-size compatible. ' +
+                              'Wraps org.opencv:opencv:4.13.0 (issue #26724 fix, Jan 2025).'
                 url         = 'https://github.com/QuickBirdEng/opencv-android'
                 licenses {
                     license {
