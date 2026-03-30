@@ -87,7 +87,7 @@ afterEvaluate {
                     name        = 'OpenCV Android'
                     description = 'OpenCV 4.13.0 for Android — 16 KB page-size compatible. ' +
                                   'Wraps org.opencv:opencv:4.13.0 (issue #26724 fix, Jan 2025).'
-                    url         = 'https://github.com/atom360/opencv-android'
+                    url         = 'https://github.com/Atom360ai/opencv-android'
 
                     licenses {
                         license {
@@ -105,9 +105,9 @@ afterEvaluate {
                     }
 
                     scm {
-                        connection          = 'scm:git:git://github.com/atom360/opencv-android.git'
-                        developerConnection = 'scm:git:ssh://github.com/atom360/opencv-android.git'
-                        url                 = 'https://github.com/atom360/opencv-android'
+                        connection          = 'scm:git:git://github.com/Atom360ai/opencv-android.git'
+                        developerConnection = 'scm:git:ssh://github.com/Atom360ai/opencv-android.git'
+                        url                 = 'https://github.com/Atom360ai/opencv-android'
                     }
                 }
             }
