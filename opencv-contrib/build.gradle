@@ -2,7 +2,6 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'maven-publish'
-    id 'signing'
 }
 
 android {
@@ -62,16 +61,13 @@ dependencies {
 // Local test:
 //   ./gradlew :opencv-contrib:publishToMavenLocal
 //
-// Release to Maven Central:
-//   ./gradlew :opencv-contrib:publishReleasePublicationToSonatypeRepository \
-//             --no-configuration-cache
+// Release to Artifactory:
+//   ./gradlew :opencv-contrib:publishReleasePublicationToArtifactoryRepository
 //
-// Required gradle.properties (or env vars):
-//   mavenCentralUsername=<Sonatype Central token username>
-//   mavenCentralPassword=<Sonatype Central token password>
-//   signing.keyId=<last 8 chars of GPG key ID>
-//   signing.password=<GPG key passphrase>
-//   signing.secretKeyRingFile=<path to ~/.gnupg/secring.gpg>
+// Required in ~/.gradle/gradle.properties (kept out of source control):
+//   artifactoryUrl=https://<your-instance>.jfrog.io/artifactory/<repo-name>
+//   artifactoryUser=<username or email>
+//   artifactoryPassword=<API key or identity token>
 // ---------------------------------------------------------------------------
 afterEvaluate {
     publishing {
@@ -100,7 +96,7 @@ afterEvaluate {
                         developer {
                             id   = 'atom360'
                             name = 'Atom360'
-                            url  = 'https://github.com/atom360'
+                            url  = 'https://github.com/Atom360ai'
                         }
                     }
 
@@ -115,18 +111,12 @@ afterEvaluate {
 
         repositories {
             maven {
-                name = 'Sonatype'
-                // Sonatype Central Portal upload endpoint
-                url = 'https://central.sonatype.com/api/v1/publisher/upload'
+                url  = 'https://v1.maven.atom360.io/artifactory/opencv-android'
                 credentials {
-                    username = project.findProperty('mavenCentralUsername') ?: ''
-                    password = project.findProperty('mavenCentralPassword') ?: ''
+                    username = project.findProperty('artifactory_username')     ?: ''
+                    password = project.findProperty('artifactory_password') ?: ''
                 }
             }
         }
-    }
-
-    signing {
-        sign publishing.publications.release
     }
 }
