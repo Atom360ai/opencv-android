@@ -56,18 +56,16 @@ dependencies {
 }
 
 // ---------------------------------------------------------------------------
-// Publishing — org.atom360:opencv-android:4.13.0
+// Publishing — via JitPack (https://jitpack.io)
+//
+// Consumers add to their settings.gradle:
+//   maven { url 'https://jitpack.io' }
+//
+// Then depend on:
+//   implementation 'com.github.Atom360ai:opencv-android:<tag>'
 //
 // Local test:
 //   ./gradlew :opencv-contrib:publishToMavenLocal
-//
-// Release to Artifactory:
-//   ./gradlew :opencv-contrib:publishReleasePublicationToArtifactoryRepository
-//
-// Required in ~/.gradle/gradle.properties (kept out of source control):
-//   artifactoryUrl=https://<your-instance>.jfrog.io/artifactory/<repo-name>
-//   artifactoryUser=<username or email>
-//   artifactoryPassword=<API key or identity token>
 // ---------------------------------------------------------------------------
 afterEvaluate {
     publishing {
@@ -109,14 +107,5 @@ afterEvaluate {
             }
         }
 
-        repositories {
-            maven {
-                url  = 'https://v1.maven.atom360.io/artifactory/opencv-android'
-                credentials {
-                    username = project.findProperty('artifactory_username')     ?: ''
-                    password = project.findProperty('artifactory_password') ?: ''
-                }
-            }
-        }
     }
 }
