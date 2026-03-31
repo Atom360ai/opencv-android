@@ -1,5 +1,5 @@
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
@@ -8,7 +8,11 @@ dependencyResolutionManagement {
 
 rootProject.name = "OpenCV-QuickbirdStudios"
 include ':app'
+include ':opencv-contrib'
 
-// Remove/comment out the one you aren't going to need
-include ":opencv_VERSION"
-include ":opencv-contrib_VERSION"
+// Source-module alternative: download the OpenCV Android SDK and place the
+// unzipped folder (named opencv_VERSION or opencv-contrib_VERSION) alongside
+// the app/ directory, then uncomment the matching line below and update
+// app/build.gradle accordingly. See README for full instructions.
+// include ":opencv_VERSION"
+// include ":opencv-contrib_VERSION"

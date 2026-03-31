@@ -1,0 +1,111 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'maven-publish'
+}
+
+android {
+    namespace "org.atom360.opencv"
+    compileSdk 35
+
+    defaultConfig {
+        minSdk 21
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    // Store .so files uncompressed with 16KB alignment so consumers get
+    // properly aligned native libs in their APK when they set
+    // android:extractNativeLibs="false" (which our manifest merge enforces).
+    packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
+    }
+
+    // Expose the release variant for Maven publishing.
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
+}
+
+dependencies {
+    // 'api' makes OpenCV visible to any app that depends on this library —
+    // no need to re-declare it in the consuming app's build.gradle.
+    //
+    // org.opencv:opencv 4.11.0+ includes the fix for 16 KB page-size support
+    // (upstream issue #26724, landed Jan 2025). Every LOAD segment in the
+    // .so files is aligned to a 16 KB boundary — the requirement for Android 15+.
+    api 'org.opencv:opencv:4.13.0'
+}
+
+// ---------------------------------------------------------------------------
+// Publishing — via JitPack (https://jitpack.io)
+//
+// Consumers add to their settings.gradle:
+//   maven { url 'https://jitpack.io' }
+//
+// Then depend on:
+//   implementation 'com.github.Atom360ai:opencv-android:<tag>'
+//
+// Local test:
+//   ./gradlew :opencv-contrib:publishToMavenLocal
+// ---------------------------------------------------------------------------
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId    = 'org.atom360'
+                artifactId = 'opencv-android'
+                version    = '4.13.0'
+
+                from components.release
+
+                pom {
+                    name        = 'OpenCV Android'
+                    description = 'OpenCV 4.13.0 for Android — 16 KB page-size compatible. ' +
+                                  'Wraps org.opencv:opencv:4.13.0 (issue #26724 fix, Jan 2025).'
+                    url         = 'https://github.com/Atom360ai/opencv-android'
+
+                    licenses {
+                        license {
+                            name = 'Apache License 2.0'
+                            url  = 'https://www.apache.org/licenses/LICENSE-2.0'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id   = 'atom360'
+                            name = 'Atom360'
+                            url  = 'https://github.com/Atom360ai'
+                        }
+                    }
+
+                    scm {
+                        connection          = 'scm:git:git://github.com/Atom360ai/opencv-android.git'
+                        developerConnection = 'scm:git:ssh://github.com/Atom360ai/opencv-android.git'
+                        url                 = 'https://github.com/Atom360ai/opencv-android'
+                    }
+                }
+            }
+        }
+
+    }
+}

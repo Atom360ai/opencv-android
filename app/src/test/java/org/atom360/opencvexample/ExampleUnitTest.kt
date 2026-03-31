@@ -1,4 +1,4 @@
-package com.quickbirdstudios.opencvexample
+package org.atom360.opencvexample
 
 import org.junit.Test
 

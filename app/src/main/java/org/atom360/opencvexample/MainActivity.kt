@@ -1,10 +1,10 @@
-package com.quickbirdstudios.opencvexample
+package org.atom360.opencvexample
 
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.quickbirdstudios.opencvexample.databinding.ActivityMainBinding
+import org.atom360.opencvexample.databinding.ActivityMainBinding
 import org.opencv.android.OpenCVLoader
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         Log.d(OpenCVTag, "Version : ${OpenCVLoader.OPENCV_VERSION}")
-        if(!OpenCVLoader.initDebug()) {
+        if (!OpenCVLoader.initLocal()) {
             binding.tvStatus.text = "Unable to load OpenCV"
             return
         }
